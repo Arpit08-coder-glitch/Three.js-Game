@@ -13,11 +13,11 @@ const TitleCard = ({ text, show }) => {
           top: "40%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          background: "black",
+          background: "rgba(0, 0, 0, 0.7)",
           color: "white",
           padding: "20px",
-          fontSize: "24px",
-          border: "2px solid white",
+          fontSize: "32px",
+          borderRadius: "10px",
           textAlign: "center",
         }}
       >
@@ -27,157 +27,114 @@ const TitleCard = ({ text, show }) => {
   );
 };
 
-// 🏃‍♂️ Fully Procedural Human Model (Hero)
-const Hero = ({ actionStep }) => {
+// 🦌 Bambi Model
+const Bambi = ({ actionStep }) => {
   const ref = useRef();
-
-  // 🏃 Character movement animation
   const { position } = useSpring({
     position:
       actionStep === 0
-        ? [-3, 0, 0] // Starting position
+        ? [-2, 0, 0]
         : actionStep === 1
-        ? [0, 0, 0] // Walk forward
-        : [1.5, 0, -1], // Dodge the object
+        ? [0, 0, 0]
+        : [2, 0, 1],
     config: { duration: 2000 },
   });
 
   return (
     <animated.group ref={ref} position={position}>
-      {/* Head */}
-      <mesh position={[0, 1.8, 0]}>
-        <sphereGeometry args={[0.4, 32, 32]} />
-        <meshStandardMaterial color="peachpuff" />
-      </mesh>
-      {/* Body */}
-      <mesh position={[0, 1, 0]}>
-        <cylinderGeometry args={[0.3, 0.5, 1, 16]} />
-        <meshStandardMaterial color="blue" />
-      </mesh>
-      {/* Arms */}
-      <mesh position={[-0.5, 1.2, 0]}>
-        <cylinderGeometry args={[0.15, 0.15, 0.8, 16]} />
-        <meshStandardMaterial color="peachpuff" />
-      </mesh>
-      <mesh position={[0.5, 1.2, 0]}>
-        <cylinderGeometry args={[0.15, 0.15, 0.8, 16]} />
-        <meshStandardMaterial color="peachpuff" />
-      </mesh>
-      {/* Legs */}
-      <mesh position={[-0.2, 0.3, 0]}>
-        <cylinderGeometry args={[0.2, 0.2, 1, 16]} />
+      <mesh position={[0, 1.5, 0]}>
+        <sphereGeometry args={[0.3, 32, 32]} />
         <meshStandardMaterial color="brown" />
       </mesh>
-      <mesh position={[0.2, 0.3, 0]}>
-        <cylinderGeometry args={[0.2, 0.2, 1, 16]} />
-        <meshStandardMaterial color="brown" />
+      <mesh position={[0, 0.8, 0]}>
+        <cylinderGeometry args={[0.2, 0.4, 1, 16]} />
+        <meshStandardMaterial color="saddlebrown" />
       </mesh>
     </animated.group>
   );
 };
 
-// 🦹‍♂️ Fully Procedural Human Model (Villain)
-const Villain = () => {
+// 🏹 Hunter Model
+const Hunter = ({ actionStep }) => {
   return (
     <group position={[3, 0, -1]}>
-      {/* Head */}
       <mesh position={[0, 1.8, 0]}>
         <sphereGeometry args={[0.4, 32, 32]} />
         <meshStandardMaterial color="gray" />
       </mesh>
-
-      {/* Body */}
       <mesh position={[0, 1, 0]}>
         <cylinderGeometry args={[0.3, 0.5, 1, 16]} />
-        <meshStandardMaterial color="black" />
-      </mesh>
-
-      {/* Arms */}
-      <mesh position={[-0.5, 1.2, 0]}>
-        <cylinderGeometry args={[0.15, 0.15, 0.8, 16]} />
-        <meshStandardMaterial color="gray" />
-      </mesh>
-      <mesh position={[0.5, 1.2, 0]}>
-        <cylinderGeometry args={[0.15, 0.15, 0.8, 16]} />
-        <meshStandardMaterial color="gray" />
-      </mesh>
-
-      {/* Legs */}
-      <mesh position={[-0.2, 0.3, 0]}>
-        <cylinderGeometry args={[0.2, 0.2, 1, 16]} />
-        <meshStandardMaterial color="black" />
-      </mesh>
-      <mesh position={[0.2, 0.3, 0]}>
-        <cylinderGeometry args={[0.2, 0.2, 1, 16]} />
         <meshStandardMaterial color="black" />
       </mesh>
     </group>
   );
 };
 
-// 🌩️ Falling Object (Danger)
-const FallingObject = ({ actionStep, setShake }) => {
-  const ref = useRef();
-
-  useFrame(() => {
-    if (ref.current.position.y > 0 && actionStep >= 2) {
-      ref.current.position.y -= 0.05; // Slow falling effect
-    }
-
-    if (ref.current.position.y <= 0 && actionStep >= 2) {
-      setShake(true);
-    }
-  });
-
+// 🌲 Forest Background
+const Forest = () => {
   return (
-    <mesh ref={ref} position={[1.5, 4, -1]}>
-      <sphereGeometry args={[0.5, 32, 32]} />
-      <meshStandardMaterial color="red" />
-    </mesh>
+    <>
+      <mesh position={[-4, 0, -5]}>
+        <coneGeometry args={[1, 3, 8]} />
+        <meshStandardMaterial color="darkgreen" />
+      </mesh>
+      <mesh position={[4, 0, -5]}>
+        <coneGeometry args={[1, 3, 8]} />
+        <meshStandardMaterial color="darkgreen" />
+      </mesh>
+    </>
   );
 };
 
 // 🎥 Camera Shake Effect
 const CameraShake = ({ shake }) => {
-  const ref = useRef();
-
   useFrame(({ camera }) => {
     if (shake) {
-      camera.position.x += Math.sin(performance.now() * 0.01) * 0.02;
-      camera.position.y += Math.sin(performance.now() * 0.01) * 0.02;
+      camera.position.x += Math.sin(performance.now() * 0.01) * 0.05;
+      camera.position.y += Math.sin(performance.now() * 0.01) * 0.05;
     }
   });
-
   return null;
 };
 
-// 🎬 Silent Movie Scene
-function SilentMovie() {
+// 🎬 Bambi Story Scene
+function BambiStory() {
   const [actionStep, setActionStep] = useState(0);
   const [showTitle, setShowTitle] = useState(true);
-  const [showBoom, setShowBoom] = useState(false);
+  const [showDanger, setShowDanger] = useState(false);
+  const [showEscape, setShowEscape] = useState(false);
+  const [showEnd, setShowEnd] = useState(false);
   const [shake, setShake] = useState(false);
 
   useEffect(() => {
     setTimeout(() => setShowTitle(false), 3000); // Hide intro text
-
-    setTimeout(() => setActionStep(1), 4000); // Move forward
-    setTimeout(() => setActionStep(2), 7000); // Object falls
-    setTimeout(() => setActionStep(3), 8500); // Dodge
-    setTimeout(() => setShowBoom(true), 9500); // "BOOM!" appears
-    setTimeout(() => setShake(false), 11000); // Stop shaking
+    setTimeout(() => setActionStep(1), 4000); // Bambi plays
+    setTimeout(() => setShowDanger(true), 6000); // Hunter appears
+    setTimeout(() => setShake(true), 7000); // Camera shake
+    setTimeout(() => setActionStep(2), 8000); // Bambi escapes
+    setTimeout(() => {
+      setShake(false);
+      setShowDanger(false);
+      setShowEscape(true);
+    }, 10000); // Safe
+    setTimeout(() => {
+      setShowEscape(false);
+      setShowEnd(true);
+    }, 12000); // Happy ending
   }, []);
 
   return (
     <div style={{ width: "100vw", height: "100vh", background: "black" }}>
-      <TitleCard text="Once upon a time..." show={showTitle} />
-      <TitleCard text="BOOM!" show={showBoom} />
+      <TitleCard text="Bambi was playing happily..." show={showTitle} />
+      <TitleCard text="Danger! A hunter appears!" show={showDanger} />
+      <TitleCard text="Bambi runs to safety..." show={showEscape} />
+      <TitleCard text="Reunited with family, Bambi is safe!" show={showEnd} />
       <Canvas camera={{ position: [5, 5, 5] }}>
-        <ambientLight intensity={0.3} />
+        <ambientLight intensity={0.5} />
         <directionalLight position={[5, 5, 5]} intensity={1} />
-        <Hero actionStep={actionStep} />
-        <Villain />
-        <FallingObject actionStep={actionStep} setShake={setShake} />
+        <Forest />
+        <Bambi actionStep={actionStep} />
+        <Hunter actionStep={actionStep} />
         <CameraShake shake={shake} />
         <OrbitControls />
       </Canvas>
@@ -185,4 +142,4 @@ function SilentMovie() {
   );
 }
 
-export default SilentMovie;
+export default BambiStory;
